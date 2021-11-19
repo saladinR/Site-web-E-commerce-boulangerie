@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Validation de la commande {% endblock %}
+
+{% block body %}
+ <script src="https://js.stripe.com/v3/"></script>
+{{ include("partials/Title.html.twig",{'name':'Validation de la commande '}) }}
+
+<div class="section">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="heading_s1">
+                    <h4>Svp verifiez votre address</h4><br>
+                    <div class="content">
+
+                        <div>
+                            <div class="liste-adress">
+                                {{address | raw}} 
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+
+                {# <a href="{{ path('checkout')}}" class="btn btn-fill-out btn-blick-mt-1">changer l'adresse </a> #}
+            </div>
+            <div class="heading_s1">
+                <h4>Mode de livraison</h4>
+                <div class="content">
+                    {{ carrier | replace({'[spr]': '<br>'}) | raw}}
+                    {# <a href="{{ path('checkout')}}" class="btn btn-fill-out btn-blick-mt-1">changer livraison </a> #}
+                </div>
+            </div>
+            {% if informations %}
+
+            <div class="heading_s1">
+                <h4>Information additionnelle</h4>
+                <div class="form-group mb-0">
+                    {{ informations}}
+                </div>
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="order_review ">
+                <div class="heading_s1">
+                    <h4>Votre commande</h4>
+                </div>
+
+                <div class="table-responsive order_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for element in cart.products %}
+                            <tr>
+                                <td> {{element.product.name}}<span class="product-qty"> X {{element.quantity}}</span>
+                                </td>
+                                <td>$ {{element.product.price/100 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>SubTotal HT</th>
+                                <td class="product-subtotal">{{cart.data.subTotalHT}} $</td>
+                            </tr>
+                            <tr>
+                                <th>Taxe</th>
+                                <td class="product-subtotal">{{cart.data.Taxe}} $</td>
+                            </tr>
+                            {% if carrier is not null%}
+                            <tr>
+
+                                <th>livraison {{carrier.name}}</th>
+
+                                <td class="product-subtotal">{{carrier.price}} $</td>
+
+                            </tr>
+                            <tr>
+                                <th>Total</th>
+                                <td class="product-subtotal">{{cart.data.subTotalTTC + carrier.price/100}} $</td>
+                            </tr>
+                            {% endif %}
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="payment_method">
+                    <div class="heading_s1">
+                        <h4>Paiement</h4>
+                    </div>
+                    {% if carrier is not null%}
+                    <a class="btn btn-fill-out btn-block" id="checkout-button-payement">valider la commande:
+                        {{cart.data.subTotalTTC + carrier.price/100}} $</a>
+                    {% endif %}
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>
+{% endblock %} {% block script %}
+<style>
+    .order_review {
+        background-color: #f7f8fb;
+        padding: 30px;
+        width: 60%;
+        margin-left: 40%;
+    }
+</style>
+
+<script type="text/javascript">
+   // var stripe = Stripe("pk_test_WKH0LC8TYPJR7xG6q5cvwfjF00hbP92C5A");
+   var clestripepk = "";
+   
+    var stripe = Stripe(clestripepk);
+
+    var checkoutButton = document.getElementById("checkout-button-payement");
+    console.log(checkoutButton);
+    checkoutButton.addEventListener("click", function () {
+        fetch("/commande/create-session/{{ reference }}", {
+            method: "POST"
+        }).then(function (response) {
+            return response.json();
+        }).then(function (session) {
+            if (session.error == 'order') {
+                window.location.replace('{{ path('order') }}');
+            } else {
+                return stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
+            }
+
+        }).then(function (result) { 
+            if (result.error) {
+                alert(result.error.message);
+            }
+        }).catch(function (error) {
+            console.error("Error:", error);
+        });
+    });
+</script>
+{% endblock %}

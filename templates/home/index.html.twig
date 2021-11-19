@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="banner_section slide_medium shop_banner_slider staggered-animation-wrap">
+    <div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active background_bg" data-img-src="/assets/images/bag-2.jpg">
+                <div class="banner_slide_content">
+                    <div class="container"><!-- STRART CONTAINER -->
+                        <div class="row">
+                            <div class="col-lg-7 col-9">
+                                <div class="banner_content overflow-hidden">
+                                	<h5 class="mb-3 staggered-animation font-weight-light" data-animation="slideInLeft" data-animation-delay="0.5s">  </h5>
+                                    <h2 class="staggered-animation" data-animation="slideInLeft" data-animation-delay="1s" style="color:white"> Chaque jour, s'engager par amour du pain </h2>
+                                    <a class="btn btn-fill-out rounded-0 staggered-animation text-uppercase" href="" data-animation="slideInLeft" style="border-radius: 50px !important ;" data-animation-delay="1.5s">Se faire plaisir !!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END CONTAINER-->
+                </div>
+            </div>
+        </div>
+        {# <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="border-radius: 50px;" ><i class="ion-chevron-left"></i></a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="border-radius: 50px;"><i class="ion-chevron-right"></i></a> #}
+    </div>
+</div>
+
+<div class="container">
+<div class="section small_pt pb_70">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+            	<div class="heading_s1 text-center">
+                	<h2>produits exclusives</h2>
+                </div>
+            </div>
+		</div>
+        <div class="row">
+        	<div class="col-12">
+            	<div class="tab-style1">
+                    <ul class="nav nav-tabs justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="arrival-tab" data-toggle="tab" href="#arrival" role="tab" aria-controls="arrival" aria-selected="true">Nouveautés</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="sellers-tab" data-toggle="tab" href="#sellers" role="tab" aria-controls="sellers" aria-selected="false">Meilleur produits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="featured-tab" data-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="false">Traditions </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="specialoffre-tab" data-toggle="tab" href="#specialoffre" role="tab" aria-controls="specialoffre" aria-selected="false">Offre spéciale</a>
+                        </li>
+
+                    </ul>
+                </div>
+<section id="sellers" class="feature-area pt-120 mt-5">
+		<div class="container">
+			<div class="row">
+                {% for product in productNewArrival %}
+               
+                    <div class="col-xl-3 col-lg-3 col-md-4" class="tab-pane fade" id="sellers" role="tabpanel" >
+                        <div class="single-feature item-{{ loop.index }} wow fadeInUp" data-wow-delay=".2s">
+                            <div class="feature-icon icon-style gradient-{{ loop.index }}">
+                                <i class="lni lni-protection"></i>
+                            </div>
+                            <div class="feature-content" >
+                                {{ include("partials/Product.html.twig",{'product': product}) }}
+                            </div>
+                        </div>
+                    </div>
+                 
+                {% endfor %}
+			</div>
+		</div>
+</section>
+                {# <div class="tab-content">
+                	<div aria-labelledby="arrival-tab">
+                        
+                              {% for product in productNewArrival %}
+                                 <div class="row">
+                                     <div class="col-lg-3">
+                                         <div class="card-body">
+                                         {{ include("partials/Product.html.twig",{'product': product}) }} 
+                                         </div>
+                                    </div> 
+                                   
+                              {% endfor %} 
+
+                    </div>
+                    <div class="tab-pane fade" id="sellers" role="tabpanel" aria-labelledby="sellers-tab">
+                      
+                             {% for product in productBestSeller %}
+                                  {{ include("partials/Product.html.twig",{'product': product}) }}  
+                              {% endfor %} 
+
+                      
+                    </div>
+                    <div class="tab-pane fade" id="specialoffre" role="tabpanel" aria-labelledby="specialoffer-tab">
+                        
+                             {% for product in productSpecialOffer %}
+                                  {{ include("partials/Product.html.twig",{'product': product}) }}  
+                              {% endfor %} 
+
+                        
+                    </div>
+                    <div class="tab-pane fade" id="featured" role="tabpanel" aria-labelledby="featured-tab">
+                   
+                             {% for product in productFeatured %}
+                                  {{ include("partials/Product.html.twig",{'product': product}) }}  
+                              {% endfor %} 
+
+                      
+                    </div>
+                      
+
+                </div> #}
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+</div>
+{% endblock %}

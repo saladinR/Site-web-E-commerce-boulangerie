@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+{% block title %}Valider ma commande {% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <h2>Je passe ma commande</h2>
+    <p>Choississez vos préférences avant de passer votre commande </p>
+    <hr>
+    <div class="row">
+
+        <div class="col-md-6">
+
+
+            {% set formHtml %} {{form_start(form,{action:path('order_recap')})}}
+            {{form_label(form.addresses,'Choisissez votre adresse de livraison')}}
+            <a href="{{ path('address_new')}}"  class="btn">Ajouter une nouvelle adresse</a> {{form_end(form)}}
+            {% endset %} {{formHtml | replace({'[br]':'<br/>'})|raw}}
+
+
+        </div>
+        <div class="col-md-6">
+
+
+            <div class="text-center">
+                <b>Recap de ma commande</b><br>
+                <p>Retrouvez le recapitulatif de vos produits.</p>
+            </div>
+
+            <div class="order-summary">
+                {% for key,product in cart %}
+
+                <div class="row {% if key > 0 %} mt-2 {% endif %}">
+
+                    {# <div class="col-2"><img src="/uploads/{{product.product.illustration}}"
+                            alt="{{product.product.name}}" height="75px"></div>
+                    <div class="col-8 my-auto">{{product.product.name}}
+                        <br>
+                        <small>{{product.product.subtitle}}</small></div>
+                    <div class="col-2 my-auto">x {{product.quantity}}</div> #}
+                </div>
+
+
+                {% endfor %}
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>    
+    <style>
+        legend.col-form-label.required {
+
+            color: black;
+            font-size: larger;
+        }
+
+        label.form-check-label.required {
+
+            color: black;
+        }
+
+        input[type=checkbox],
+        input[type=radio] {
+            margin: 8px 0 0;
+            width: 24px;
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        #order_addresses,
+        #order_carriers {
+            background-color: rgb(219, 245, 245);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 16px;
+        }
+    </style>
+    {% endblock %}
